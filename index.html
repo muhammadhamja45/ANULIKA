@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function () {
+    var t = localStorage.getItem('anulika-theme');
+    var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (dark) document.documentElement.classList.add('dark');
+  })();
+</script>
+<title>Anulika — Photography Studio | Portfolio &amp; Booking Fotografi</title>
+<meta name="description" content="Anulika adalah studio fotografi premium yang mengabadikan momen pernikahan, pre-wedding, potret, dan acara Anda dengan gaya editorial yang elegan. Lihat portfolio dan booking sesi Anda sekarang.">
+<meta property="og:title" content="Anulika — Photography Studio">
+<meta property="og:description" content="Studio fotografi premium untuk wedding, pre-wedding, potret, dan acara Anda.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://picsum.photos/seed/anulika-og/1200/630">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="js/tailwind-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-paper text-ink antialiased dark:bg-neutral-950 dark:text-neutral-100 transition-colors duration-300">
+
+<div id="site-header" class="sticky top-0 z-40 border-b border-neutral-200 bg-paper dark:border-neutral-800 dark:bg-neutral-950"></div>
+
+<main>
+  <!-- Hero -->
+  <section class="relative flex h-[92vh] min-h-[560px] items-end overflow-hidden bg-neutral-900">
+    <!-- Ganti dengan foto hero asli di assets/images/hero.jpg -->
+    <img src="https://picsum.photos/seed/anulika-hero/1600/2000" alt="Momen yang diabadikan oleh Anulika Photography" class="absolute inset-0 h-full w-full object-cover animate-kenburns">
+    <div class="absolute inset-0 bg-black/45"></div>
+    <div class="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 lg:px-8">
+      <p data-aos="fade-up" class="text-xs uppercase tracking-[0.3em] text-white/70">Photography Studio</p>
+      <h1 data-aos="fade-up" data-aos-delay="100" class="mt-4 font-display text-6xl text-white sm:text-7xl lg:text-8xl">ANULIKA</h1>
+      <p data-aos="fade-up" data-aos-delay="200" class="mt-6 max-w-md text-base leading-relaxed text-white/80">Mengabadikan momen berharga Anda dengan sudut pandang yang jujur, elegan, dan abadi.</p>
+      <div data-aos="fade-up" data-aos-delay="300" class="mt-10 flex flex-wrap gap-4">
+        <a href="portfolio.html" class="border border-white px-7 py-3 text-sm uppercase tracking-widest text-white transition-colors hover:bg-white hover:text-neutral-900">Lihat Portfolio</a>
+        <a href="booking.html" class="bg-white px-7 py-3 text-sm uppercase tracking-widest text-neutral-900 transition-colors hover:bg-neutral-100">Booking Sekarang</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category preview -->
+  <section class="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+    <div class="mb-12 flex items-end justify-between" data-aos="fade-up">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-neutral-400">Layanan</p>
+        <h2 class="mt-3 font-display text-4xl text-neutral-900 dark:text-white sm:text-5xl">Kategori Portfolio</h2>
+      </div>
+      <a href="portfolio.html" class="hidden text-sm uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white sm:inline-block">Lihat Semua →</a>
+    </div>
+    <div id="categories-preview" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
+  </section>
+
+  <!-- Featured portfolio -->
+  <section class="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+    <div class="mb-12 flex items-end justify-between" data-aos="fade-up">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-neutral-400">Karya Pilihan</p>
+        <h2 class="mt-3 font-display text-4xl text-neutral-900 dark:text-white sm:text-5xl">Foto Terbaik Kami</h2>
+      </div>
+      <a href="portfolio.html" class="hidden text-sm uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white sm:inline-block">Lihat Semua →</a>
+    </div>
+    <div id="featured-grid" class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"></div>
+  </section>
+
+  <!-- About preview -->
+  <section class="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <div data-aos="fade-right" class="aspect-[4/5] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+        <!-- Ganti dengan foto asli di assets/images/about.jpg -->
+        <img src="https://picsum.photos/seed/anulika-about/900/1100" alt="Fotografer Anulika sedang bekerja di lokasi pemotretan" class="h-full w-full object-cover">
+      </div>
+      <div data-aos="fade-left">
+        <p class="text-xs uppercase tracking-[0.3em] text-neutral-400">Tentang Kami</p>
+        <h2 class="mt-4 font-display text-4xl text-neutral-900 dark:text-white sm:text-5xl">Cerita di Balik Anulika</h2>
+        <p class="mt-6 leading-relaxed text-neutral-500 dark:text-neutral-400">Anulika lahir dari kecintaan pada detail dan momen yang tak terulang. Setiap sesi kami dekati secara personal — bukan sekadar memotret, tapi menceritakan kisah Anda melalui cahaya dan komposisi.</p>
+        <a href="about.html" class="mt-8 inline-block border-b border-neutral-900 pb-1 text-sm uppercase tracking-widest text-neutral-900 dark:border-white dark:text-white">Selengkapnya</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking CTA -->
+  <section class="border-t border-neutral-200 bg-neutral-900 py-24 text-center dark:border-neutral-800">
+    <div class="mx-auto max-w-3xl px-6">
+      <h2 data-aos="fade-up" class="font-display text-4xl text-white sm:text-5xl">Siap Mengabadikan Momen Anda?</h2>
+      <p data-aos="fade-up" data-aos-delay="100" class="mt-4 text-neutral-300">Jadwalkan sesi pemotretan Anda bersama Anulika hari ini.</p>
+      <a data-aos="fade-up" data-aos-delay="200" href="booking.html" class="mt-8 inline-block bg-white px-8 py-3 text-sm uppercase tracking-widest text-neutral-900 transition-colors hover:bg-neutral-100">Booking Sekarang</a>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer" class="border-t border-neutral-200 dark:border-neutral-800"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="module" src="js/main.js"></script>
+<script type="module">
+  import { fetchActiveCategories, fetchPublishedPortfolios, renderPortfolioCard, skeletonGrid, emptyState, errorState } from './js/portfolio.js';
+  import { escapeHtml } from './js/utils.js';
+
+  async function loadCategoriesPreview() {
+    const el = document.getElementById('categories-preview');
+    el.innerHTML = skeletonGrid(4);
+    try {
+      const categories = await fetchActiveCategories();
+      el.innerHTML = categories.length
+        ? categories.slice(0, 8).map((c, i) => `
+          <a href="portfolio.html?category=${encodeURIComponent(c.slug)}" data-aos="fade-up" data-aos-delay="${(i % 4) * 80}" class="group border border-neutral-200 p-8 text-center transition-colors hover:border-neutral-900 dark:border-neutral-800 dark:hover:border-white">
+            <h3 class="font-display text-2xl text-neutral-900 dark:text-white">${escapeHtml(c.name)}</h3>
+            ${c.description ? `<p class="mt-2 text-sm text-neutral-400">${escapeHtml(c.description)}</p>` : ''}
+          </a>`).join('')
+        : emptyState('Kategori akan segera hadir.');
+      if (window.AOS) AOS.refreshHard();
+    } catch (err) {
+      el.innerHTML = errorState('Gagal memuat kategori.');
+      console.error(err);
+    }
+  }
+
+  async function loadFeatured() {
+    const el = document.getElementById('featured-grid');
+    el.innerHTML = skeletonGrid(6);
+    try {
+      const items = await fetchPublishedPortfolios({ limit: 6 });
+      el.innerHTML = items.length ? items.map((item, i) => renderPortfolioCard(item, i)).join('') : emptyState('Portfolio akan segera hadir.');
+      if (window.AOS) AOS.refreshHard();
+    } catch (err) {
+      el.innerHTML = errorState('Gagal memuat portfolio.');
+      console.error(err);
+    }
+  }
+
+  loadCategoriesPreview();
+  loadFeatured();
+</script>
+</body>
+</html>

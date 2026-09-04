@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function () {
+    var t = localStorage.getItem('anulika-theme');
+    var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (dark) document.documentElement.classList.add('dark');
+  })();
+</script>
+<title>Tentang Kami — Anulika Photography</title>
+<meta name="description" content="Kenali Anulika, studio fotografi yang mengutamakan pendekatan personal dan gaya editorial dalam setiap sesi pemotretan.">
+<meta property="og:title" content="Tentang Kami — Anulika Photography">
+<meta property="og:description" content="Kenali filosofi dan pendekatan Anulika dalam mengabadikan momen Anda.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="js/tailwind-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-paper text-ink antialiased dark:bg-neutral-950 dark:text-neutral-100 transition-colors duration-300">
+
+<div id="site-header" class="sticky top-0 z-40 border-b border-neutral-200 bg-paper dark:border-neutral-800 dark:bg-neutral-950"></div>
+
+<main>
+  <!-- Page heading -->
+  <section class="mx-auto max-w-7xl px-6 pb-16 pt-20 lg:px-8">
+    <p data-aos="fade-up" class="text-xs uppercase tracking-[0.3em] text-neutral-400">Tentang Kami</p>
+    <h1 data-aos="fade-up" data-aos-delay="100" class="mt-4 font-display text-5xl text-neutral-900 dark:text-white sm:text-6xl">Anulika</h1>
+  </section>
+
+  <!-- Portrait + story -->
+  <section class="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <div data-aos="fade-right" class="aspect-[4/5] overflow-hidden bg-neutral-100 dark:bg-neutral-900">
+        <!-- Ganti dengan foto asli fotografer di assets/images/photographer.jpg -->
+        <img src="https://picsum.photos/seed/anulika-photographer/900/1100" alt="Potret fotografer Anulika" class="h-full w-full object-cover">
+      </div>
+      <div data-aos="fade-left" class="space-y-6 leading-relaxed text-neutral-500 dark:text-neutral-400">
+        <p>Anulika lahir dari satu keyakinan sederhana: setiap momen berharga layak diabadikan dengan jujur, bukan direkayasa. Kami percaya foto terbaik datang dari cahaya alami, ekspresi yang tak dibuat-buat, dan komposisi yang tenang.</p>
+        <p>Sejak awal berdiri, kami berfokus melayani pernikahan, pre-wedding, potret keluarga, hingga acara korporat — selalu dengan pendekatan yang sama: mendengarkan cerita klien terlebih dahulu, baru mengangkat kamera.</p>
+        <p>Setiap hasil jepretan melewati proses kurasi dan editing yang cermat, menghasilkan galeri yang terasa seperti satu kesatuan cerita, bukan sekadar kumpulan foto.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="border-t border-neutral-200 bg-neutral-50 py-24 dark:border-neutral-800 dark:bg-neutral-900/40">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <h2 data-aos="fade-up" class="font-display text-4xl text-neutral-900 dark:text-white sm:text-5xl">Kenapa Memilih Kami</h2>
+      <div class="mt-14 grid gap-12 sm:grid-cols-3">
+        <div data-aos="fade-up" data-aos-delay="0">
+          <p class="font-display text-4xl text-neutral-300 dark:text-neutral-700">01</p>
+          <h3 class="mt-4 text-lg font-medium text-neutral-900 dark:text-white">Gaya Editorial</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">Komposisi bersih dan naratif, terinspirasi dari majalah fotografi kelas atas.</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="100">
+          <p class="font-display text-4xl text-neutral-300 dark:text-neutral-700">02</p>
+          <h3 class="mt-4 text-lg font-medium text-neutral-900 dark:text-white">Pendekatan Personal</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">Setiap sesi direncanakan sesuai karakter dan cerita klien, bukan template baku.</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="200">
+          <p class="font-display text-4xl text-neutral-300 dark:text-neutral-700">03</p>
+          <h3 class="mt-4 text-lg font-medium text-neutral-900 dark:text-white">Kualitas Konsisten</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">Dari pemotretan hingga hasil akhir, setiap detail melewati kurasi yang teliti.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking CTA -->
+  <section class="bg-neutral-900 py-24 text-center">
+    <div class="mx-auto max-w-3xl px-6">
+      <h2 data-aos="fade-up" class="font-display text-4xl text-white sm:text-5xl">Mari Berkolaborasi</h2>
+      <p data-aos="fade-up" data-aos-delay="100" class="mt-4 text-neutral-300">Ceritakan momen Anda, biar kami yang mengabadikannya.</p>
+      <a data-aos="fade-up" data-aos-delay="200" href="booking.html" class="mt-8 inline-block bg-white px-8 py-3 text-sm uppercase tracking-widest text-neutral-900 transition-colors hover:bg-neutral-100">Booking Sekarang</a>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer" class="border-t border-neutral-200 dark:border-neutral-800"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function () {
+    var t = localStorage.getItem('anulika-theme');
+    var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (dark) document.documentElement.classList.add('dark');
+  })();
+</script>
+<title>Admin Login — Anulika Photography</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../js/tailwind-config.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="flex min-h-screen items-center justify-center bg-paper px-6 text-ink antialiased transition-colors duration-300 dark:bg-neutral-950 dark:text-neutral-100">
+
+<div class="w-full max-w-sm">
+  <div class="mb-10 text-center">
+    <p class="font-display text-3xl tracking-[0.2em] text-neutral-900 dark:text-white">ANULIKA</p>
+    <p class="mt-2 text-xs uppercase tracking-widest text-neutral-400">Admin Dashboard</p>
+  </div>
+
+  <form id="login-form" class="space-y-5">
+    <div>
+      <label for="email" class="mb-1.5 block text-xs uppercase tracking-widest text-neutral-400">Email</label>
+      <input type="email" id="email" name="email" required autocomplete="username" class="w-full border border-neutral-300 bg-transparent px-4 py-2.5 text-sm focus:border-neutral-900 focus:outline-none dark:border-neutral-700 dark:focus:border-white">
+    </div>
+    <div>
+      <label for="password" class="mb-1.5 block text-xs uppercase tracking-widest text-neutral-400">Password</label>
+      <input type="password" id="password" name="password" required autocomplete="current-password" class="w-full border border-neutral-300 bg-transparent px-4 py-2.5 text-sm focus:border-neutral-900 focus:outline-none dark:border-neutral-700 dark:focus:border-white">
+    </div>
+    <p id="login-error" class="hidden border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-900 dark:bg-red-950 dark:text-red-400"></p>
+    <p id="login-info" class="hidden border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300"></p>
+    <button type="submit" id="login-submit" class="w-full bg-neutral-900 px-6 py-3 text-sm uppercase tracking-widest text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200">Masuk</button>
+  </form>
+
+  <a href="../index.html" class="mt-8 block text-center text-xs uppercase tracking-widest text-neutral-400 hover:text-neutral-900 dark:hover:text-white">← Kembali ke Website</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script type="module">
+  import { getSession, signIn } from '../js/auth.js';
+
+  if (new URLSearchParams(location.search).get('deactivated')) {
+    const info = document.getElementById('login-info');
+    info.textContent = 'Akun Anda telah dinonaktifkan. Hubungi administrator.';
+    info.classList.remove('hidden');
+  }
+
+  (async () => {
+    const session = await getSession();
+    if (session) window.location.href = 'dashboard.html';
+  })();
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('login-error');
+    errorEl.classList.add('hidden');
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('login-submit');
+    btn.disabled = true;
+    btn.textContent = 'Memproses...';
+
+    const { error } = await signIn(email, password);
+
+    if (error) {
+      btn.disabled = false;
+      btn.textContent = 'Masuk';
+      errorEl.textContent = 'Email atau password salah.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    window.location.href = 'dashboard.html';
+  });
+</script>
+</body>
+</html>

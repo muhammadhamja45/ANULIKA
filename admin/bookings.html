@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function () {
+    var t = localStorage.getItem('anulika-theme');
+    var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (dark) document.documentElement.classList.add('dark');
+  })();
+</script>
+<title>Booking — Anulika Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../js/tailwind-config.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-neutral-50 text-ink antialiased transition-colors duration-300 dark:bg-neutral-950 dark:text-neutral-100">
+
+<div class="flex min-h-screen">
+  <div id="admin-sidebar-backdrop" class="fixed inset-0 z-30 hidden bg-black/40 lg:hidden"></div>
+  <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 flex w-64 -translate-x-full flex-col bg-white transition-transform duration-200 dark:bg-neutral-950 lg:static lg:translate-x-0 lg:border-r lg:border-neutral-200 lg:dark:border-neutral-800"></aside>
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header id="admin-topbar" class="flex h-16 shrink-0 items-center gap-2 border-b border-neutral-200 bg-white px-4 dark:border-neutral-800 dark:bg-neutral-950 sm:px-6"></header>
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <div class="mb-8">
+        <h1 class="font-display text-3xl text-neutral-900 dark:text-white">Booking</h1>
+        <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Kelola seluruh booking dari client.</p>
+      </div>
+
+      <div class="mb-6 flex flex-wrap items-end gap-4">
+        <div>
+          <label class="mb-1.5 block text-xs uppercase tracking-widest text-neutral-400">Status</label>
+          <select id="filter-status" class="border border-neutral-300 bg-transparent px-4 py-2 text-sm focus:border-neutral-900 focus:outline-none dark:border-neutral-700 dark:focus:border-white">
+            <option value="">Semua Status</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="rejected">Rejected</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div>
+          <label class="mb-1.5 block text-xs uppercase tracking-widest text-neutral-400">Tanggal</label>
+          <input type="date" id="filter-date" class="border border-neutral-300 bg-transparent px-4 py-2 text-sm focus:border-neutral-900 focus:outline-none dark:border-neutral-700 dark:focus:border-white">
+        </div>
+        <button id="filter-reset" class="px-4 py-2 text-sm uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-white">Reset</button>
+      </div>
+
+      <div class="overflow-x-auto rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+        <table class="w-full text-left text-sm">
+          <thead class="border-b border-neutral-200 text-xs uppercase tracking-widest text-neutral-400 dark:border-neutral-800">
+            <tr>
+              <th class="px-5 py-3 font-medium">Nama</th>
+              <th class="px-5 py-3 font-medium">WhatsApp</th>
+              <th class="px-5 py-3 font-medium">Layanan</th>
+              <th class="px-5 py-3 font-medium">Tanggal</th>
+              <th class="px-5 py-3 font-medium">Jam</th>
+              <th class="px-5 py-3 font-medium">Status</th>
+              <th class="px-5 py-3 text-right font-medium">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="bookings-table-body" class="divide-y divide-neutral-100 dark:divide-neutral-800"></tbody>
+        </table>
+      </div>
+
+      <div id="blocked-dates-section" class="mt-10">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="font-display text-xl text-neutral-900 dark:text-white">Tanggal Diblokir</h2>
+          <button id="add-blocked-date-btn" class="bg-neutral-900 px-4 py-2 text-sm text-white dark:bg-white dark:text-neutral-900">+ Blokir Tanggal</button>
+        </div>
+        <div id="blocked-dates-list" class="divide-y divide-neutral-100 rounded-lg border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="admin-modal-root"></div>
+<div id="admin-toast-root" class="fixed bottom-4 right-4 z-[60] space-y-2"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script type="module" src="../js/admin/bookings.js"></script>
+</body>
+</html>

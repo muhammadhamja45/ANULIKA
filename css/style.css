@@ -1,0 +1,43 @@
+/* Hand-written CSS for the handful of things Tailwind utilities can't do.
+   Everything else (layout, spacing, color, dark mode) is Tailwind classes in the HTML. */
+
+/* Tells the browser to render native UI (select dropdowns, date/time pickers,
+   checkboxes, scrollbars) in dark chrome when .dark is active — without this,
+   those controls ignore the .dark class and stay in the OS/browser's default
+   light style even though the rest of the page is dark. */
+:root {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+html, body {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-display {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* thin scrollbar for admin tables / modals */
+* {
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.4);
+  border-radius: 9999px;
+}
+
+/* slow, subtle zoom for hero imagery — the one deliberate "motion" moment on the site */
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+.animate-kenburns {
+  animation: kenburns 20s ease-out forwards;
+}

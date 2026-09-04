@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function () {
+    var t = localStorage.getItem('anulika-theme');
+    var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (dark) document.documentElement.classList.add('dark');
+  })();
+</script>
+<title>Portfolio — Anulika Photography</title>
+<meta name="description" content="Jelajahi portfolio Anulika: wedding, pre-wedding, potret, keluarga, korporat, dan berbagai momen berharga lainnya.">
+<meta property="og:title" content="Portfolio — Anulika Photography">
+<meta property="og:description" content="Jelajahi karya fotografi Anulika berdasarkan kategori.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="js/tailwind-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-paper text-ink antialiased dark:bg-neutral-950 dark:text-neutral-100 transition-colors duration-300">
+
+<div id="site-header" class="sticky top-0 z-40 border-b border-neutral-200 bg-paper dark:border-neutral-800 dark:bg-neutral-950"></div>
+
+<main>
+  <section class="mx-auto max-w-7xl px-6 pb-12 pt-20 lg:px-8">
+    <p data-aos="fade-up" class="text-xs uppercase tracking-[0.3em] text-neutral-400">Karya Kami</p>
+    <h1 data-aos="fade-up" data-aos-delay="100" class="mt-4 font-display text-5xl text-neutral-900 dark:text-white sm:text-6xl">Portfolio</h1>
+    <p data-aos="fade-up" data-aos-delay="150" class="mt-4 max-w-lg text-neutral-500 dark:text-neutral-400">Kumpulan momen yang telah kami abadikan, disusun berdasarkan kategori layanan.</p>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
+    <div id="category-filters" class="mb-12 flex flex-wrap gap-3"></div>
+    <div id="portfolio-grid" class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"></div>
+  </section>
+</main>
+
+<div id="site-footer" class="border-t border-neutral-200 dark:border-neutral-800"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/portfolio.js"></script>
+</body>
+</html>

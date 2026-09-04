@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function () {
+    var t = localStorage.getItem('anulika-theme');
+    var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (dark) document.documentElement.classList.add('dark');
+  })();
+</script>
+<title>Detail Portfolio — Anulika Photography</title>
+<meta name="description" content="Detail proyek fotografi Anulika.">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="js/tailwind-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-paper text-ink antialiased dark:bg-neutral-950 dark:text-neutral-100 transition-colors duration-300">
+
+<div id="site-header" class="sticky top-0 z-40 border-b border-neutral-200 bg-paper dark:border-neutral-800 dark:bg-neutral-950"></div>
+
+<main>
+  <!-- Loading state -->
+  <section id="detail-loading" class="mx-auto max-w-7xl animate-pulse px-6 py-24 lg:px-8">
+    <div class="h-4 w-24 bg-neutral-100 dark:bg-neutral-900"></div>
+    <div class="mt-4 h-12 w-2/3 bg-neutral-100 dark:bg-neutral-900"></div>
+    <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
+      <div class="aspect-square bg-neutral-100 dark:bg-neutral-900"></div>
+      <div class="aspect-square bg-neutral-100 dark:bg-neutral-900"></div>
+      <div class="aspect-square bg-neutral-100 dark:bg-neutral-900"></div>
+    </div>
+  </section>
+
+  <!-- Not found state -->
+  <section id="detail-notfound" class="mx-auto hidden max-w-7xl px-6 py-32 text-center lg:px-8">
+    <p class="font-display text-3xl text-neutral-900 dark:text-white">Portfolio tidak ditemukan</p>
+    <p class="mt-3 text-neutral-500 dark:text-neutral-400">Proyek ini mungkin belum dipublikasikan atau sudah dihapus.</p>
+    <a href="portfolio.html" class="mt-8 inline-block border-b border-neutral-900 pb-1 text-sm uppercase tracking-widest text-neutral-900 dark:border-white dark:text-white">← Kembali ke Portfolio</a>
+  </section>
+
+  <!-- Content -->
+  <article id="detail-content" class="hidden">
+    <section class="mx-auto max-w-7xl px-6 pb-12 pt-20 lg:px-8">
+      <p id="detail-category" class="text-xs uppercase tracking-[0.3em] text-neutral-400"></p>
+      <h1 id="detail-title" class="mt-4 font-display text-5xl text-neutral-900 dark:text-white sm:text-6xl"></h1>
+      <time id="detail-date" class="mt-4 block text-sm text-neutral-400"></time>
+      <p id="detail-description" class="mt-6 max-w-2xl leading-relaxed text-neutral-500 dark:text-neutral-400"></p>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-6 pb-16 lg:px-8">
+      <div id="detail-gallery" class="grid grid-cols-2 gap-4 sm:grid-cols-3"></div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
+      <a href="portfolio.html" class="inline-block border-b border-neutral-900 pb-1 text-sm uppercase tracking-widest text-neutral-900 dark:border-white dark:text-white">← Kembali ke Portfolio</a>
+    </section>
+  </article>
+</main>
+
+<div id="site-footer" class="border-t border-neutral-200 dark:border-neutral-800"></div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/95">
+  <button id="lightbox-close" aria-label="Tutup" class="absolute right-5 top-5 p-2 text-white/70 hover:text-white">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-7 w-7"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+  </button>
+  <button id="lightbox-prev" aria-label="Sebelumnya" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white sm:left-6">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-8 w-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+  </button>
+  <img id="lightbox-image" src="" alt="" class="lightbox-enter max-h-[85vh] max-w-[88vw] object-contain">
+  <button id="lightbox-next" aria-label="Berikutnya" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white sm:right-6">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-8 w-8"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+  </button>
+  <p id="lightbox-counter" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-sm text-white/70"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="module" src="js/main.js"></script>
+<script type="module">
+  import { fetchPortfolioBySlug } from './js/portfolio.js';
+  import { escapeHtml } from './js/utils.js';
+
+  const slug = new URLSearchParams(location.search).get('slug');
+  let images = [];
+  let currentIndex = 0;
+
+  const lightbox = document.getElementById('lightbox');
+
+  function updateLightbox() {
+    const img = document.getElementById('lightbox-image');
+    img.src = images[currentIndex].image_url;
+    img.alt = `${document.getElementById('detail-title').textContent} — foto ${currentIndex + 1}`;
+    document.getElementById('lightbox-counter').textContent = `${currentIndex + 1} / ${images.length}`;
+  }
+  function openLightbox(index) {
+    currentIndex = index;
+    updateLightbox();
+    lightbox.classList.remove('hidden');
+    lightbox.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.add('hidden');
+    lightbox.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+  function showPrev() { currentIndex = (currentIndex - 1 + images.length) % images.length; updateLightbox(); }
+  function showNext() { currentIndex = (currentIndex + 1) % images.length; updateLightbox(); }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-prev').addEventListener('click', showPrev);
+  document.getElementById('lightbox-next').addEventListener('click', showNext);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPrev();
+    if (e.key === 'ArrowRight') showNext();
+  });
+
+  function showNotFound() {
+    document.getElementById('detail-loading').classList.add('hidden');
+    document.getElementById('detail-notfound').classList.remove('hidden');
+  }
+
+  async function init() {
+    if (!slug) return showNotFound();
+    const portfolio = await fetchPortfolioBySlug(slug);
+    if (!portfolio) return showNotFound();
+
+    images = portfolio.images?.length ? portfolio.images : (portfolio.cover_image ? [{ image_url: portfolio.cover_image }] : []);
+
+    document.title = `${portfolio.title} — Anulika Photography`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', portfolio.description || `Galeri foto ${portfolio.title} oleh Anulika Photography.`);
+    document.getElementById('detail-category').textContent = portfolio.category?.name ?? 'Tanpa Kategori';
+    document.getElementById('detail-title').textContent = portfolio.title;
+
+    const dateEl = document.getElementById('detail-date');
+    if (portfolio.shoot_date) {
+      dateEl.dateTime = portfolio.shoot_date;
+      dateEl.textContent = new Date(`${portfolio.shoot_date}T00:00:00`).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    document.getElementById('detail-description').textContent = portfolio.description ?? '';
+
+    const gallery = document.getElementById('detail-gallery');
+    gallery.innerHTML = images.length
+      ? images.map((img, i) => `
+        <button type="button" data-index="${i}" class="lightbox-trigger aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-900" data-aos="fade-up" data-aos-delay="${(i % 3) * 80}">
+          <img src="${img.image_url}" alt="${escapeHtml(portfolio.title)} — foto ${i + 1}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 hover:scale-105">
+        </button>`).join('')
+      : '<p class="col-span-full py-12 text-center text-neutral-400">Belum ada foto galeri untuk portfolio ini.</p>';
+
+    gallery.querySelectorAll('.lightbox-trigger').forEach((btn) => {
+      btn.addEventListener('click', () => openLightbox(Number(btn.dataset.index)));
+    });
+
+    document.getElementById('detail-loading').classList.add('hidden');
+    document.getElementById('detail-content').classList.remove('hidden');
+    if (window.AOS) AOS.refreshHard();
+  }
+
+  init();
+</script>
+</body>
+</html>
