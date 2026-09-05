@@ -72,6 +72,7 @@ create table public.bookings (
   category_id uuid references public.categories(id) on delete set null,
   booking_date date not null,
   booking_time time not null,
+  end_time time,
   location text,
   notes text,
   status text not null default 'pending'
@@ -100,6 +101,21 @@ create table public.app_settings (
 );
 insert into public.app_settings (id, booking_open) values (1, true);
 
+-- packages: photography packages shown on the homepage
+create table public.packages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  price_label text, -- free text, e.g. "Rp 2.500.000" or "Mulai dari Rp 1.500.000"
+  description text,
+  features text, -- one included item per line, rendered as a bullet list
+  image_url text,
+  is_active boolean not null default true,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index idx_packages_active on public.packages(is_active);
+
 -- =============================================================================
 -- updated_at auto-touch trigger
 -- =============================================================================
@@ -122,6 +138,8 @@ create trigger trg_portfolios_updated_at before update on public.portfolios
 create trigger trg_bookings_updated_at before update on public.bookings
   for each row execute function public.set_updated_at();
 create trigger trg_app_settings_updated_at before update on public.app_settings
+  for each row execute function public.set_updated_at();
+create trigger trg_packages_updated_at before update on public.packages
   for each row execute function public.set_updated_at();
 
 -- =============================================================================
@@ -173,6 +191,7 @@ alter table public.portfolio_images enable row level security;
 alter table public.bookings enable row level security;
 alter table public.blocked_dates enable row level security;
 alter table public.app_settings enable row level security;
+alter table public.packages enable row level security;
 
 -- profiles: staff can read all profiles (needed for admin/users.html); only admin can write.
 create policy "profiles_select" on public.profiles
@@ -245,6 +264,16 @@ create policy "app_settings_select_public" on public.app_settings
   for select using (true);
 create policy "app_settings_update_admin" on public.app_settings
   for update using (public.is_admin());
+
+-- packages: public sees only active ones; staff (admin+editor) manage all.
+create policy "packages_select" on public.packages
+  for select using (is_active = true or public.is_staff());
+create policy "packages_insert_staff" on public.packages
+  for insert with check (public.is_staff());
+create policy "packages_update_staff" on public.packages
+  for update using (public.is_staff());
+create policy "packages_delete_staff" on public.packages
+  for delete using (public.is_staff());
 
 -- =============================================================================
 -- SEED: first admin account

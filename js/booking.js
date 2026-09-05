@@ -7,19 +7,28 @@ import { escapeHtml } from './utils.js';
 const WEEKDAYS = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-// Fixed session slots per day. Edit this list to match how the studio actually
-// books sessions (e.g. hourly) — a date is only fully blocked once every slot
-// below is taken; individual taken slots are disabled in the time picker.
-const TIME_SLOTS = ['08:00', '10:00', '13:00', '15:00', '17:00'];
+// Fixed session blocks per day, each with a start and end time. Edit this list
+// to match how the studio actually books sessions — a date is only fully
+// blocked once every block below is taken; individual taken blocks are
+// disabled in the time picker so double-booking is impossible.
+const TIME_SLOTS = [
+  { start: '08:00', end: '10:00' },
+  { start: '10:00', end: '12:00' },
+  { start: '13:00', end: '15:00' },
+  { start: '15:00', end: '17:00' },
+  { start: '17:00', end: '19:00' },
+];
+const slotKey = (start, end) => `${start}|${end}`;
 
 let viewDate = new Date();
 viewDate.setDate(1);
 let selectedDate = null;
-let selectedTime = null;
+let selectedStart = null;
+let selectedEnd = null;
 let selectedCategoryId = null;
 let selectedCategoryName = null;
 let blockedDateSet = new Set();
-let bookedSlotsByDate = new Map(); // dateISO -> Set of "HH:MM" already booked
+let bookedSlotsByDate = new Map(); // dateISO -> Set of "start|end" keys already booked
 
 const toISODate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const todayISO = () => toISODate(new Date());
@@ -82,22 +91,24 @@ async function loadAvailability() {
   const today = todayISO();
   const [{ data: blocked }, { data: booked }] = await Promise.all([
     supabase.from('blocked_dates').select('blocked_date').gte('blocked_date', today),
-    supabase.from('bookings').select('booking_date, booking_time').in('status', ['pending', 'confirmed']).gte('booking_date', today),
+    supabase.from('bookings').select('booking_date, booking_time, end_time').in('status', ['pending', 'confirmed']).gte('booking_date', today),
   ]);
 
   blockedDateSet = new Set((blocked ?? []).map((b) => b.blocked_date));
 
   bookedSlotsByDate = new Map();
   for (const b of booked ?? []) {
-    const time = (b.booking_time ?? '').slice(0, 5); // Postgres returns "HH:MM:SS" — normalize to "HH:MM"
+    const start = (b.booking_time ?? '').slice(0, 5); // Postgres returns "HH:MM:SS" — normalize to "HH:MM"
+    const end = (b.end_time ?? '').slice(0, 5);
+    if (!start || !end) continue; // legacy rows saved before end_time existed — nothing to match against
     if (!bookedSlotsByDate.has(b.booking_date)) bookedSlotsByDate.set(b.booking_date, new Set());
-    bookedSlotsByDate.get(b.booking_date).add(time);
+    bookedSlotsByDate.get(b.booking_date).add(slotKey(start, end));
   }
 }
 
 function isDateFullyBooked(iso) {
   const taken = bookedSlotsByDate.get(iso);
-  return Boolean(taken) && TIME_SLOTS.every((slot) => taken.has(slot));
+  return Boolean(taken) && TIME_SLOTS.every((slot) => taken.has(slotKey(slot.start, slot.end)));
 }
 
 function isDateUnavailable(iso) {
@@ -142,9 +153,8 @@ function renderCalendar() {
   daysEl.querySelectorAll('button[data-date]:not(:disabled)').forEach((btn) => {
     btn.addEventListener('click', () => {
       selectedDate = btn.dataset.date;
-      selectedTime = null;
-      document.getElementById('booking-date').value = selectedDate;
-      document.getElementById('time').value = '';
+      selectedStart = null;
+      selectedEnd = null;
       document.getElementById('selected-date-label').textContent = formatDateLabel(selectedDate);
       clearError();
       renderCalendar();
@@ -169,19 +179,20 @@ function renderTimeSlots() {
 
   const taken = bookedSlotsByDate.get(selectedDate) ?? new Set();
   container.innerHTML = TIME_SLOTS.map((slot) => {
-    const isTaken = taken.has(slot);
-    const isSelected = selectedTime === slot;
+    const key = slotKey(slot.start, slot.end);
+    const isTaken = taken.has(key);
+    const isSelected = selectedStart === slot.start && selectedEnd === slot.end;
     let cls = 'time-slot-btn border px-4 py-2 text-sm transition-colors ';
     if (isTaken) cls += 'cursor-not-allowed border-neutral-200 text-neutral-300 line-through dark:border-neutral-800 dark:text-neutral-700';
     else if (isSelected) cls += 'border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900';
     else cls += 'border-neutral-300 text-neutral-700 hover:border-neutral-900 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-white';
-    return `<button type="button" data-time="${slot}" ${isTaken ? 'disabled' : ''} class="${cls}">${slot}</button>`;
+    return `<button type="button" data-start="${slot.start}" data-end="${slot.end}" ${isTaken ? 'disabled' : ''} class="${cls}">${slot.start} – ${slot.end}</button>`;
   }).join('');
 
   container.querySelectorAll('.time-slot-btn:not(:disabled)').forEach((btn) => {
     btn.addEventListener('click', () => {
-      selectedTime = btn.dataset.time;
-      document.getElementById('time').value = selectedTime;
+      selectedStart = btn.dataset.start;
+      selectedEnd = btn.dataset.end;
       clearError();
       renderTimeSlots();
     });
@@ -227,11 +238,13 @@ async function handleSubmit(e) {
   const location = form.location.value.trim();
   const notes = form.notes.value.trim();
 
-  if (!name || !whatsapp || !categoryId || !selectedDate || !selectedTime || !location) {
+  if (!name || !whatsapp || !categoryId || !selectedDate || !selectedStart || !selectedEnd || !location) {
     showError('Mohon lengkapi semua field wajib, termasuk memilih tanggal dan jam.');
     return;
   }
-  if (isDateUnavailable(selectedDate) || (bookedSlotsByDate.get(selectedDate)?.has(selectedTime))) {
+
+  const key = slotKey(selectedStart, selectedEnd);
+  if (isDateUnavailable(selectedDate) || bookedSlotsByDate.get(selectedDate)?.has(key)) {
     showError('Tanggal/jam yang dipilih baru saja terisi. Silakan pilih jadwal lain.');
     await loadAvailability();
     renderCalendar();
@@ -247,7 +260,8 @@ async function handleSubmit(e) {
     name, whatsapp, email: email || null,
     category_id: categoryId,
     booking_date: selectedDate,
-    booking_time: selectedTime,
+    booking_time: selectedStart,
+    end_time: selectedEnd,
     location,
     notes: notes || null,
   });
@@ -261,12 +275,13 @@ async function handleSubmit(e) {
     return;
   }
 
+  const timeRange = `${selectedStart} - ${selectedEnd}`;
   showSuccess({
     name, whatsapp, location,
-    time: selectedTime,
+    time: timeRange,
     date: formatDateLabel(selectedDate),
     service: categoryName,
-    waLink: buildWhatsAppLink({ name, whatsapp, date: formatDateLabel(selectedDate), time: selectedTime, service: categoryName, location }),
+    waLink: buildWhatsAppLink({ name, whatsapp, date: formatDateLabel(selectedDate), time: timeRange, service: categoryName, location }),
   });
 }
 

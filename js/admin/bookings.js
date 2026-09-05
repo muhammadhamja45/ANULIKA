@@ -32,7 +32,7 @@ function row(b) {
       <td class="px-5 py-3.5 text-neutral-500 dark:text-neutral-400">${escapeHtml(b.whatsapp)}</td>
       <td class="px-5 py-3.5 text-neutral-500 dark:text-neutral-400">${escapeHtml(b.category?.name ?? 'Tanpa Kategori')}</td>
       <td class="px-5 py-3.5 text-neutral-500 dark:text-neutral-400">${b.booking_date}</td>
-      <td class="px-5 py-3.5 text-neutral-500 dark:text-neutral-400">${b.booking_time}</td>
+      <td class="px-5 py-3.5 text-neutral-500 dark:text-neutral-400">${b.booking_time.slice(0, 5)}${b.end_time ? ` – ${b.end_time.slice(0, 5)}` : ''}</td>
       <td class="px-5 py-3.5">${statusBadge(b.status)}</td>
       <td class="px-5 py-3.5 text-right">
         <button data-id="${b.id}" class="detail-btn text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 dark:hover:text-white">Detail</button>
@@ -77,7 +77,7 @@ function openDetail(id) {
         ${detailRow('Email', escapeHtml(b.email || '-'))}
         ${detailRow('Layanan', escapeHtml(b.category?.name ?? 'Tanpa Kategori'))}
         ${detailRow('Tanggal', b.booking_date)}
-        ${detailRow('Jam', b.booking_time)}
+        ${detailRow('Jam', `${b.booking_time.slice(0, 5)}${b.end_time ? ` – ${b.end_time.slice(0, 5)}` : ''}`)}
         ${detailRow('Lokasi', escapeHtml(b.location || '-'))}
         ${detailRow('Catatan', escapeHtml(b.notes || '-'))}
       </dl>

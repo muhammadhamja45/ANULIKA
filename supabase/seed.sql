@@ -130,8 +130,41 @@ insert into public.portfolio_images (portfolio_id, image_url, sort_order) values
   ('a0000001-0000-4000-8000-000000000008', 'https://picsum.photos/seed/anulika-other-4/1000/1000', 3);
 
 -- ---------------------------------------------------------------------------
+-- Photography packages (shown on the homepage)
+-- ---------------------------------------------------------------------------
+insert into public.packages (id, name, price_label, description, features, image_url, is_active, sort_order) values
+  ('b0000002-0000-4000-8000-000000000001', 'Paket Basic', 'Rp 1.500.000',
+   'Sesi personal singkat untuk momen sehari-hari.',
+   '2 jam sesi pemotretan
+1 fotografer
+20 foto hasil edit
+Softcopy resolusi tinggi',
+   'https://picsum.photos/seed/anulika-package-basic/800/1000', true, 0),
+
+  ('b0000002-0000-4000-8000-000000000002', 'Paket Premium', 'Rp 3.500.000',
+   'Pilihan populer untuk pre-wedding dan keluarga.',
+   '4 jam sesi pemotretan
+2 fotografer
+50 foto hasil edit
+Softcopy resolusi tinggi
+1 cetak foto ukuran 20x30',
+   'https://picsum.photos/seed/anulika-package-premium/800/1000', true, 1),
+
+  ('b0000002-0000-4000-8000-000000000003', 'Paket Deluxe', 'Rp 6.000.000',
+   'Liputan penuh untuk hari besar seperti pernikahan.',
+   '8 jam sesi pemotretan (full day)
+2 fotografer + 1 asisten
+100 foto hasil edit
+Softcopy resolusi tinggi
+Album cetak eksklusif
+Video highlight singkat',
+   'https://picsum.photos/seed/anulika-package-deluxe/800/1000', true, 2)
+on conflict (id) do nothing;
+
+-- ---------------------------------------------------------------------------
 -- To remove all sample data later, run:
 -- ---------------------------------------------------------------------------
 -- delete from public.portfolios where id::text like 'a0000001-0000-4000-8000-%'; -- cascades to portfolio_images
 -- delete from public.categories where slug in
 --   ('wedding','graduation','pre-wedding','portrait','event','family','corporate','other');
+-- delete from public.packages where id::text like 'b0000002-0000-4000-8000-%';

@@ -67,6 +67,17 @@
     <div id="featured-grid" class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"></div>
   </section>
 
+  <!-- Packages -->
+  <section class="border-t border-neutral-200 bg-neutral-50 py-24 dark:border-neutral-800 dark:bg-neutral-900/40">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mb-12" data-aos="fade-up">
+        <p class="text-xs uppercase tracking-[0.3em] text-neutral-400">Investasi</p>
+        <h2 class="mt-3 font-display text-4xl text-neutral-900 dark:text-white sm:text-5xl">Paket Fotografi</h2>
+      </div>
+      <div id="packages-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </section>
+
   <!-- About preview -->
   <section class="mx-auto max-w-7xl px-6 py-24 lg:px-8">
     <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
@@ -101,6 +112,7 @@
 <script type="module">
   import { fetchActiveCategories, fetchPublishedPortfolios, renderPortfolioCard, skeletonGrid, emptyState, errorState } from './js/portfolio.js';
   import { escapeHtml } from './js/utils.js';
+  import { supabase } from './js/supabase.js';
 
   async function loadCategoriesPreview() {
     const el = document.getElementById('categories-preview');
@@ -134,8 +146,41 @@
     }
   }
 
+  function renderPackageCard(pkg, i) {
+    const features = (pkg.features || '').split('\n').map((f) => f.trim()).filter(Boolean);
+    const image = pkg.image_url
+      ? `<img src="${pkg.image_url}" alt="${escapeHtml(pkg.name)}" loading="lazy" class="h-full w-full object-cover">`
+      : `<div class="flex h-full w-full items-center justify-center bg-neutral-100 text-xs text-neutral-300 dark:bg-neutral-900 dark:text-neutral-700">Belum ada foto</div>`;
+    return `
+      <div class="flex flex-col border border-neutral-200 dark:border-neutral-800" data-aos="fade-up" data-aos-delay="${(i % 3) * 80}">
+        <div class="aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-neutral-900">${image}</div>
+        <div class="flex flex-1 flex-col p-8">
+          <h3 class="font-display text-2xl text-neutral-900 dark:text-white">${escapeHtml(pkg.name)}</h3>
+          ${pkg.price_label ? `<p class="mt-2 text-lg text-neutral-500 dark:text-neutral-400">${escapeHtml(pkg.price_label)}</p>` : ''}
+          ${pkg.description ? `<p class="mt-4 text-sm text-neutral-500 dark:text-neutral-400">${escapeHtml(pkg.description)}</p>` : ''}
+          ${features.length ? `<ul class="mt-6 flex-1 space-y-2 text-sm text-neutral-600 dark:text-neutral-300">${features.map((f) => `<li class="flex gap-2"><span class="text-neutral-400">—</span><span>${escapeHtml(f)}</span></li>`).join('')}</ul>` : '<div class="flex-1"></div>'}
+          <a href="booking.html" class="mt-8 inline-block border-b border-neutral-900 pb-1 text-sm uppercase tracking-widest text-neutral-900 dark:border-white dark:text-white">Booking Sekarang</a>
+        </div>
+      </div>`;
+  }
+
+  async function loadPackages() {
+    const el = document.getElementById('packages-grid');
+    el.innerHTML = skeletonGrid(3);
+    try {
+      const { data, error } = await supabase.from('packages').select('*').eq('is_active', true).order('sort_order', { ascending: true });
+      if (error) throw error;
+      el.innerHTML = data.length ? data.map((pkg, i) => renderPackageCard(pkg, i)).join('') : emptyState('Paket akan segera hadir.');
+      if (window.AOS) AOS.refreshHard();
+    } catch (err) {
+      el.innerHTML = errorState('Gagal memuat paket.');
+      console.error(err);
+    }
+  }
+
   loadCategoriesPreview();
   loadFeatured();
+  loadPackages();
 </script>
 </body>
 </html>

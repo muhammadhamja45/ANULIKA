@@ -7,7 +7,8 @@ Static HTML/CSS/JS (Tailwind CDN + vanilla ES modules) with Supabase as the back
 1. **Create a Supabase project** at [supabase.com](https://supabase.com).
 2. **Run the schema.** SQL Editor → paste and run [supabase/schema.sql](supabase/schema.sql). This creates all tables, indexes, triggers, RLS policies, and a `booking_open` app setting.
 3. **Set up Storage.** Follow [supabase/storage-setup.md](supabase/storage-setup.md) to create the `portfolio-images` bucket and its policies.
-3b. **(Optional) Seed sample data.** SQL Editor → paste and run [supabase/seed.sql](supabase/seed.sql) to populate the 8 example categories plus one demo portfolio each (placeholder photos from picsum.photos, easy to delete or replace via the admin panel).
+3b. **(Optional) Seed sample data.** SQL Editor → paste and run [supabase/seed.sql](supabase/seed.sql) to populate the 8 example categories, one demo portfolio each, and 3 sample photography packages (placeholder photos from picsum.photos, easy to delete or replace via the admin panel).
+3c. **Already ran schema.sql before this version?** SQL Editor → paste and run [supabase/migration_002_time_range_and_packages.sql](supabase/migration_002_time_range_and_packages.sql) — adds the `end_time` column to `bookings` and the `packages` table. Skip this on a brand-new project; `schema.sql` already includes both.
 4. **Deploy the admin-users Edge Function** (needed only for the "create user" / "delete user" actions in `/admin/users.html` — everything else works without it):
    ```
    supabase functions deploy admin-users
